@@ -36,13 +36,15 @@
             stop.address = [busStop objectForKey:@"_address"];
             stop.routes = stop.subtitle;
             stop.transfers = [busStop objectForKey:@"inter_modal"];
-                stop.coordinate = CLLocationCoordinate2DMake([[busStop objectForKey:@"latitude"] floatValue], [[busStop objectForKey:@"longitude"] floatValue]);
+                stop.coordinate = CLLocationCoordinate2DMake([[busStop objectForKey:@"latitude"] doubleValue], [[busStop objectForKey:@"longitude"] doubleValue]);
             [self.mapView addAnnotation:stop];
         }
-        CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(41.89373984, -87.63532979);
-        MKCoordinateSpan span = MKCoordinateSpanMake(.4, 0.4);
-        MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
-        [self.mapView setRegion:region animated:YES];
+        
+        [self.mapView showAnnotations:self.mapView.annotations animated:YES];
+//        CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(41.89373984, -87.63532979);
+//        MKCoordinateSpan span = MKCoordinateSpanMake(.4, 0.4);
+//        MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+//        [self.mapView setRegion:region animated:YES];
     }];
 }
 
