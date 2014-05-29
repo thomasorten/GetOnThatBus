@@ -14,10 +14,7 @@
 @interface ViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property NSArray *busStops;
-@property NSString *selectedTitle;
-@property NSString *selectedAddress;
-@property NSString *selectedRoutes;
-@property NSString *selectedTransfers;
+@property NSDictionary *selectedStop;
 @end
 
 @implementation ViewController
@@ -31,20 +28,10 @@
         self.busStops = [[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError] objectForKey:@"row"];
         for (NSDictionary *busStop in self.busStops) {
             MapViewAnnotation *stop = [[MapViewAnnotation alloc] init];
-            stop.title = [busStop objectForKey:@"cta_stop_name"];
-            stop.subtitle = [busStop objectForKey:@"routes"];
-            stop.address = [busStop objectForKey:@"_address"];
-            stop.routes = stop.subtitle;
-            stop.transfers = [busStop objectForKey:@"inter_modal"];
-                stop.coordinate = CLLocationCoordinate2DMake([[busStop objectForKey:@"latitude"] doubleValue], [[busStop objectForKey:@"longitude"] doubleValue]);
+            stop.dictionary = busStop;
             [self.mapView addAnnotation:stop];
         }
-        
         [self.mapView showAnnotations:self.mapView.annotations animated:YES];
-//        CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(41.89373984, -87.63532979);
-//        MKCoordinateSpan span = MKCoordinateSpanMake(.4, 0.4);
-//        MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
-//        [self.mapView setRegion:region animated:YES];
     }];
 }
 
@@ -59,20 +46,15 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     MapViewAnnotation *selectedAnnotation = (MapViewAnnotation *)view.annotation;
-    self.selectedTitle = selectedAnnotation.title;
-    self.selectedAddress = selectedAnnotation.address;
-    self.selectedRoutes = selectedAnnotation.routes;
-    self.selectedTransfers = selectedAnnotation.transfers;
+    self.selectedStop = selectedAnnotation.dictionary;
     [self performSegueWithIdentifier: @"DetailSegue" sender: self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     DetailViewController *nextController = [segue destinationViewController];
-    nextController.title = self.selectedTitle;
-    nextController.address = self.selectedAddress;
-    nextController.routes = self.selectedRoutes;
-    nextController.transfers = self.selectedTransfers;
+    nextController.title = [self.selectedStop objectForKey:@"cta_stop_name"];
+    nextController.stop = self.selectedStop;
 }
 
 @end

@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MapViewAnnotation.h"
 
 @interface DetailViewController : UIViewController
-@property NSString *address;
-@property NSString *routes;
-@property NSString *transfers;
+@property NSDictionary *stop;
 @end

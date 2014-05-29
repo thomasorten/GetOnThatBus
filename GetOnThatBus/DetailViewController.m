@@ -21,9 +21,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.addressLabel.text = self.address;
-    self.routesLabel.text = self.routes;
-    self.transfersTextView.text = self.transfers;
+    self.addressLabel.text =  [self.stop objectForKey:@"cta_stop_name"];
+    self.routesLabel.text = [self.stop objectForKey:@"routes"];;
+    self.transfersTextView.text = [self.stop objectForKey:@"inter_modal"];;
 }
 
 @end
